@@ -1,0 +1,40 @@
+.bg-custom-1 {
+    background: #1b1b1b;
+}
+.bg-custom-2 {
+    background: #1b1b1b;
+}
+.bg-purple {
+    background: #BB86FC;
+}
+.bg-purple-dark {
+    background: #3700b3;
+}
+.bg-pink {
+    background: rgb(238, 39, 99);
+}
+.text-pink {
+    color: #e0447d;
+}
+.text-purple-2 {
+    color: #3700b3;
+}
+.text-dark-secondary {
+    color: #03DAC6;
+}
+.text-black {
+    color: #000000;
+}
+.text-white {
+    color: #ffffff;
+}
+.text-gray {
+    color: #828282;
+}
+.title-1 {
+    font-family: 'Playfair Display', serif;
+}
+.btn-dark {
+    color: #000000;
+    background: #f66b95;
+}
