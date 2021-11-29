@@ -365,9 +365,7 @@ export class News extends Component {
         return (
 
             <>
-                <h1 className="text-pink text-center display-4">Top Headlines{(this.props.category !== "general") ? (" in " + this.capitalizeFirstLetter(this.props.category)) : ""}</h1>
-
-
+                <h1 className="text-pink text-center display-4 m-2">Top Headlines{(this.props.category !== "general") ? (" in " + this.capitalizeFirstLetter(this.props.category)) : ""}</h1>
                 <InfiniteScroll
                     dataLength={this.state.articles.length} //This is important field to render the next data
                     next={this.fetchMore}
