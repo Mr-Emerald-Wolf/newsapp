@@ -9,7 +9,7 @@ export class Navbar extends Component {
     render() {
         return (
             <>
-                <nav className="navbar navbar-expand-lg navbar-dark bg-custom-2 ">
+                <nav className="navbar navbar-expand-lg navbar-dark bg-custom-2 sticky-top">
                     <div className="container-fluid">
                         <a className="navbar-brand text-light title-1" href="/">Midnight Express</a>
                         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,7 +30,7 @@ export class Navbar extends Component {
                             </ul>
                             <form className="d-flex">
                                 <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-                                <button className ="btn btn-outline-secondary text-light" type ="submit">Search</button>
+                                <button className ="btn btn-outline-secondary text-light" disabled = {true}type ="submit">Search</button>
                             </form>
                         </div>
                     </div>

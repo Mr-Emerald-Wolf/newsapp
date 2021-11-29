@@ -3,8 +3,8 @@ import React, { Component } from 'react'
 export class NewsItem extends Component {
     render() {
         let imageUrl = this.props.articleData["urlToImage"];
-        let title = this.props.articleData["title"].slice(0,40);
-        let description = this.props.articleData["description"].slice(0,80);
+        let title = this.props.articleData["title"];
+        let description = this.props.articleData["description"];
         let newsUrl = this.props.articleData["url"];
 
         return (

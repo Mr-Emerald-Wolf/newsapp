@@ -38,3 +38,19 @@
     color: #000000;
     background: #f66b95;
 }
+.btn-white {
+    color: #000000;
+    background: #fff;
+}
+.bg-dark1 {
+    background: #121212;
+}
+.w-10 {
+    width: 10%;
+}
+@media only screen and (max-width: 768px) {
+    /* For mobile phones: */
+    .w-10 {
+        width: 30%;
+    }
+  }

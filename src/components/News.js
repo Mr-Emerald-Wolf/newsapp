@@ -1,16 +1,31 @@
 import React, { Component } from 'react'
 import NewsItem from './NewsItem'
+import Spinner from './Spinner';
+import PropTypes from 'prop-types'
+
 //COMPONENT DID MOUNT FIRES AFTER AFTER  RENDER ==== NO DATA FOR PROPS IN RENDER ==== ERROR DUE TO NO VARIABLE FOUND 
 //DON"T PASS PROPS IN RENDER WHICH USE STATE BECAUSE COMPONENT DID MOUNT FIRES THEM 
 //OTHERWISE RENDER WILL NOT GET 
 export class News extends Component {
 
+    static defaulProps = {
+        pageSize: 12,
+        country: 'us',
+        category: "general",
+        
+    }
+    static propTypes = {
+        pageSize: PropTypes.number,
+        country: PropTypes.string,
+        category: PropTypes.string
+
+    }
+
     constructor() {
         super();
         //console.log("Hello I am constructor bro!")
         this.state = {
-            articles: [
-                {
+            articles: [{
                     "source": {
                         "id": "the-verge",
                         "name": "The Verge"
@@ -269,19 +284,81 @@ export class News extends Component {
                     "urlToImage": "https://static.reuters.com/resources/r/?d=20211011&i=OVEYPZZPN&r=OVEYPZZPN&t=2",
                     "publishedAt": "2021-10-11T20:36:25Z",
                     "content": "Posted \r\nJamie Dimon, JPMorgan Chase &amp; Co chief executive, said on Monday at a conference by the Institute of International Finance that cryptocurrencies will be regulated by governments and that… [+87 chars]"
-                }
-            ],
-            loading: false
+                }], //Do change here
+            loading: false, //Do change here
+            currentPage: 1,
+            pages: 1,
+            
+
         }
     }
 
-    async componentDidMount() { //API Fetch here
-        //console.log("CDM");
-        let url = "https://newsapi.org/v2/top-headlines?country=in&apiKey=3631d5c3f95c46a693ba5ccbaf935a21";
+    fetchData = async (url) => {
         let data = await fetch(url);
         let parsedData = await data.json();
-        //this.setState({ articles: parsedData.articles });
-        console.log(parsedData);
+        this.setState({
+            data: parsedData.articles,
+            articles: parsedData.articles.slice(0, this.props.pageSize),
+            loading: false
+        });
+
+    }
+
+    async componentDidMount() { //API Fetch here
+        let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&apiKey=3631d5c3f95c46a693ba5ccbaf935a21&pageSize=${this.props.pageSize}&page=${this.state.currentPage}&category=${this.props.category}`;
+        let data = await fetch(url);
+        let parsedData = await data.json();
+        let totalPages = Math.ceil((parsedData.totalResults) / this.props.pageSize);
+
+        this.setState({
+            //data: parsedData.articles,
+            //articles: parsedData.articles.slice(0, this.props.pageSize),
+            pages: totalPages,
+            loading: false
+        });
+
+        // //console.log(this.state.currentPage);
+        // console.log(totalPages);
+        // //console.log(url);
+        // console.log(parsedData.articles);
+        // console.log(parsedData.totalResults);
+        // //console.log("CDM");
+        // console.log(this.state.data.slice(0,6));
+        // console.log(this.state.data.slice({this.props.pageSize},18));
+
+    } //Do change here
+
+    toggleNew = () => {
+        if (this.state.currentPage >= this.state.pages) {
+            console.log(this.state.currentPage);
+        }
+        else {
+            let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&pageSize=${this.props.pageSize}&apiKey=3631d5c3f95c46a693ba5ccbaf935a21&page=${this.state.currentPage + 1}&category=${this.props.category}`;
+            this.setState({ loading: true });
+            this.fetchData(url);
+            this.setState({ currentPage: this.state.currentPage + 1 });
+            console.log(this.state.currentPage);
+            //console.log("Else");
+            //console.log(url);
+        }
+    }
+
+    togglePrev = () => {
+
+        if (this.state.currentPage <= 1) {
+            console.log(this.state.currentPage);
+        }
+        else {
+
+            let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&pageSize=${this.props.pageSize}&apiKey=3631d5c3f95c46a693ba5ccbaf935a21&page=${this.state.currentPage - 1}&category=${this.props.category}`;
+            this.setState({ loading: true });
+            this.fetchData(url);
+            //this.setState({loading: false});
+            this.setState({ currentPage: this.state.currentPage - 1 });
+            console.log("Else");
+            console.log(this.state.currentPage);
+            // console.log(url);
+        }
     }
 
 
@@ -289,17 +366,18 @@ export class News extends Component {
         return (
 
             <>
-                <div className="container my-1">
-                    <h1 className="text-pink">Top Headlines</h1>
+                <div className="container my-3">
+                    <h1 className="text-pink text-center display-4">Top Headlines{(this.props.category!=="general") ? (" in " + this.props.category) : ""}</h1>
                     <div className="row my-1">
-                        {this.state.articles.map((element) => {
+                        {this.state.loading && <Spinner />}
+                        {!this.state.loading && this.state.articles.map((element) => {
                             return (<NewsItem key={element.url} articleData={element} />)
                         })}
                     </div>
                 </div>
                 <div className="container my-3 d-flex justify-content-between">
-                    <button type="button" class="btn btn-dark">← Previous</button>
-                    <button type="button" class="btn btn-dark">Next →</button>
+                    <button disabled={this.state.currentPage <= 1} type="button" className="btn btn-dark" onClick={this.togglePrev}>← Previous</button>
+                    <button disabled={this.state.currentPage >= this.state.pages} type="button" className="btn btn-dark" onClick={this.toggleNew}>Next →</button>
                 </div>
             </>
         )
