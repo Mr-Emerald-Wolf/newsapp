@@ -310,7 +310,7 @@ export class News extends Component {
 
     }
     fetchMore = () => {
-        const proxyUrl = "https://cors-anywhere.herokuapp.com/"
+        const proxyUrl = "https://api-cors-proxy-me.herokuapp.com/"
         let url = `${proxyUrl}https://newsapi.org/v2/top-headlines?country=${this.props.country}&pageSize=${this.props.pageSize}&apiKey=c1c9663c29a340e6bb8c82cf8e0295f9&page=${this.state.currentPage + 1}&category=${this.props.category}`;
         //this.setState({ loading: true });
         this.fetchData(url);
