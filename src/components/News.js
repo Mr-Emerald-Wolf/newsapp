@@ -331,7 +331,7 @@ export class News extends Component {
             });
     }
     async componentDidMount() { //API Fetch here
-        const proxyUrl = "https://cors-anywhere.herokuapp.com/"
+        const proxyUrl = "https://api-cors-proxy-me.herokuapp.com/"
         const reqOptions = { 'mode': 'cors', headers: { 'Access-Control-Allow-Origin': '*' } };
         let url = `${proxyUrl}https://newsapi.org/v2/top-headlines?country=${this.props.country}&apiKey=c1c9663c29a340e6bb8c82cf8e0295f9&pageSize=${this.props.pageSize}&page=${this.state.currentPage}&category=${this.props.category}`;
         let data = await fetch(url,reqOptions);
