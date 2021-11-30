@@ -11,7 +11,7 @@ export class News extends Component {
     static defaulProps = {
         pageSize: 12,
         country: 'us',
-        category: "general",
+        category: "news",
 
     }
     static propTypes = {
@@ -298,8 +298,8 @@ export class News extends Component {
     capitalizeFirstLetter = (string) => {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
-    fetchData = async (url) => {
-        let data = await fetch(url);
+    fetchData = async (url,req) => {
+        let data = await fetch(url,req);
         let parsedData = await data.json();
         this.setState({
             data: parsedData.articles,
@@ -309,27 +309,30 @@ export class News extends Component {
 
     }
     fetchMore = () => {
-        const proxyUrl = "https://api-cors-proxy-me.herokuapp.com/"
-        let url = `${proxyUrl}https://newsapi.org/v2/top-headlines?country=${this.props.country}&pageSize=${this.props.pageSize}&apiKey=c1c9663c29a340e6bb8c82cf8e0295f9&page=${this.state.currentPage + 1}&category=${this.props.category}`;
+        //let url = `https://gnews.io/api/v4/top-headlines?token=fec4d25fed36fb758b1fc94243bad346&lang=en&country=${this.props.country}&page=${this.state.currentPage+1}&q=${this.props.category}`;
+        let url = `https://api.newscatcherapi.com/v2/latest_headlines?countries=US&topic=${this.props.category}&page_size=10&page=${this.state.currentPage+1}`
+        const reqOptions = { headers: { 'x-api-key': 'll0DexesayjJrMbd6BBiRVQb70kXHARxgSGpNwFXgIo' } };
+
         //this.setState({ loading: true });
-        this.fetchData(url);
+        this.fetchData(url,reqOptions);
         this.setState({ currentPage: this.state.currentPage + 1 });
     }
    
 
     async componentDidMount() { //API Fetch here
-        const proxyUrl = "https://api-cors-proxy-me.herokuapp.com/"
-        const reqOptions = { 'mode': 'cors', method: 'GET', headers: { 'Access-Control-Allow-Origin': '*', "Connection": "Upgrade", "Upgrade": "websocket" } };
-        let url = `${proxyUrl}https://newsapi.org/v2/top-headlines?country=${this.props.country}&apiKey=c1c9663c29a340e6bb8c82cf8e0295f9&pageSize=${this.props.pageSize}&page=${this.state.currentPage}&category=${this.props.category}`;
-        let data = await fetch(url, reqOptions);
+        //const proxyUrl = "https://api-cors-proxy-me.herokuapp.com/"
+        const reqOptions = { headers: { 'x-api-key': 'll0DexesayjJrMbd6BBiRVQb70kXHARxgSGpNwFXgIo' } };
+        //let url = `https://gnews.io/api/v4/top-headlines?token=fec4d25fed36fb758b1fc94243bad346&lang=en&country=${this.props.country}&page=${this.state.currentPage}&q=${this.props.category}`;
+        let url = `https://api.newscatcherapi.com/v2/latest_headlines?countries=US&page_size=10&page=1&topic=${this.props.category}`
+        let data = await fetch(url,reqOptions);
         let parsedData = await data.json();
-        let pagesAvailable = Math.ceil((parsedData.totalResults) / this.props.pageSize);
+        let pagesAvailable = Math.ceil((parsedData.total_hits) / this.props.pageSize);
 
         this.setState({
             data: parsedData.articles,
             articles: parsedData.articles,
             totalPages: pagesAvailable,
-            totalResults: parsedData.totalResults,
+            //totalResults: parsedData.total_hits,
             loading: false
 
         });
@@ -338,8 +341,9 @@ export class News extends Component {
 
         // //console.log(this.state.currentPage);
         // console.log(totalPages);
-        console.log(url);
-        // console.log(parsedData.articles);
+        //console.log(url);
+        console.log(data);
+        console.log(parsedData.articles);
         // console.log(parsedData.totalResults);
         // //console.log("CDM");
         // console.log(this.state.data.slice(0,6));
