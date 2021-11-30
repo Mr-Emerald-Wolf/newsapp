@@ -317,7 +317,7 @@ export class News extends Component {
         this.setState({ currentPage: this.state.currentPage + 1 });
     }
     proxyCheck = () => {
-        const proxyUrl = "https://cors-anywhere.herokuapp.com/"
+        const proxyUrl = "https://api-cors-proxy-me.herokuapp.com/"
         const url = `${proxyUrl}https://newsapi.org/v2/everything?q=bitcoin&apiKey=c1c9663c29a340e6bb8c82cf8e0295f9`;
         const request = new Request(url);
 
@@ -347,7 +347,7 @@ export class News extends Component {
 
         });
 
-        //this.proxyCheck();
+        this.proxyCheck();
 
         // //console.log(this.state.currentPage);
         // console.log(totalPages);
