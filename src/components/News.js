@@ -289,7 +289,7 @@ export class News extends Component {
             loading: true, //Do change here
             currentPage: 1,
             totalPages: 1,
-            totalResults: 50
+            totalResults: 20
 
 
         }
@@ -298,31 +298,32 @@ export class News extends Component {
     capitalizeFirstLetter = (string) => {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
-    fetchData = async (url,req) => {
-        let data = await fetch(url,req);
-        let parsedData = await data.json();
-        this.setState({
-            data: parsedData.articles,
-            articles: this.state.articles.concat(parsedData.articles),
-            loading: false
-        });
-
-    }
+    fetchData = async () => {
+            let url = `https://api.newscatcherapi.com/v2/latest_headlines?countries=US&topic=${this.props.category}&page_size=10&page=${this.state.currentPage+1}`
+            const req = { headers: { 'x-api-key': 'll0DexesayjJrMbd6BBiRVQb70kXHARxgSGpNwFXgIo' } };
+    
+            let data = await fetch(url,req);
+            let parsedData = await data.json();
+           
+            this.setState({
+                currentPage: this.state.currentPage + 1,
+                data: parsedData.articles,
+                articles: this.state.articles.concat(parsedData.articles),
+                loading: false
+            });
+            
+        }
     fetchMore = () => {
-        //let url = `https://gnews.io/api/v4/top-headlines?token=fec4d25fed36fb758b1fc94243bad346&lang=en&country=${this.props.country}&page=${this.state.currentPage+1}&q=${this.props.category}`;
-        let url = `https://api.newscatcherapi.com/v2/latest_headlines?countries=US&topic=${this.props.category}&page_size=10&page=${this.state.currentPage+1}`
-        const reqOptions = { headers: { 'x-api-key': 'll0DexesayjJrMbd6BBiRVQb70kXHARxgSGpNwFXgIo' } };
-
-        //this.setState({ loading: true });
-        this.fetchData(url,reqOptions);
-        this.setState({ currentPage: this.state.currentPage + 1 });
+        
+        setTimeout(() => {this.fetchData()}, 1000);
+        //console.log("Hit1");
+        //console.log(this.state.articles.length);
+        
     }
    
 
     async componentDidMount() { //API Fetch here
-        //const proxyUrl = "https://api-cors-proxy-me.herokuapp.com/"
         const reqOptions = { headers: { 'x-api-key': 'll0DexesayjJrMbd6BBiRVQb70kXHARxgSGpNwFXgIo' } };
-        //let url = `https://gnews.io/api/v4/top-headlines?token=fec4d25fed36fb758b1fc94243bad346&lang=en&country=${this.props.country}&page=${this.state.currentPage}&q=${this.props.category}`;
         let url = `https://api.newscatcherapi.com/v2/latest_headlines?countries=US&page_size=10&page=1&topic=${this.props.category}`
         let data = await fetch(url,reqOptions);
         let parsedData = await data.json();
@@ -342,8 +343,8 @@ export class News extends Component {
         // //console.log(this.state.currentPage);
         // console.log(totalPages);
         //console.log(url);
-        console.log(data);
-        console.log(parsedData.articles);
+        //console.log(data);
+        //console.log(parsedData.articles);
         // console.log(parsedData.totalResults);
         // //console.log("CDM");
         // console.log(this.state.data.slice(0,6));
@@ -361,10 +362,10 @@ export class News extends Component {
                 <InfiniteScroll
                     dataLength={this.state.articles.length} //This is important field to render the next data
                     next={this.fetchMore}
-                    hasMore={this.state.articles.length !== this.state.totalResults}
+                    hasMore={this.state.articles.length<=this.state.totalResults}
                     loader={<Spinner />}
                     endMessage={
-                        <div className="container m-1 d-flex justify-content-center">
+                        <div className="container d-flex my-3 justify-content-center">
                             <p className="text-pink display-5 fw-bold">Yay! You have reached the end...</p>
                         </div>
                     }

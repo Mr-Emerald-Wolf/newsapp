@@ -18,8 +18,8 @@ export default class App extends Component {
         <Header />
         <Categories />
         <Routes>
-          <Route exact path="/" element={<News key = "General" pageSize={12} country="us" category={"news"} />} />
-          <Route exact path="/general" element={<News key = "General1" pageSize={12} country="us" category={"news"} />} />
+          <Route exact path="/" element={<News key = "root" pageSize={12} country="us" category={"news"} />} />
+          <Route exact path="/general" element={<News key = "Home" pageSize={12} country="us" category={"news"} />} />
           <Route exact path="/sports" element={<News key = "Sports" pageSize={12} country="us" category={"sport"} />} />
           <Route exact path="/tech" element={<News key = "Tech" pageSize={12} country="us" category={"tech"} />} />
           <Route exact path="/science" element={<News key = "Science" pageSize={12} country="us" category={"science"} />} />
