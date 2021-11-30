@@ -5,11 +5,11 @@ export class NewsItem extends Component {
 
     render() {
         let imageUrl = this.props.articleData["media"];
-        let title = this.props.articleData["title"];
-        let description = (this.props.articleData["summary"]==null ? " ": this.props.articleData["summary"]).slice(0,30);
-        let newsUrl = this.props.articleData["url"];
+        let title = (this.props.articleData["title"]==null ? " ": this.props.articleData["summary"]).slice(0,60);
+        let description = (this.props.articleData["summary"]==null ? " ": this.props.articleData["summary"]).slice(0,120);
+        let newsUrl = this.props.articleData["link"];
         let author = this.props.articleData["author"];
-        let time = new Date(this.props.articleData["published_date"]).toGMTString();
+        let time = this.props.articleData["published_date"];
 
         return (
             <>
