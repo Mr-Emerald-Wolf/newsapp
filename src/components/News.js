@@ -3,7 +3,6 @@ import NewsItem from './NewsItem'
 import Spinner from './Spinner';
 import PropTypes from 'prop-types'
 import InfiniteScroll from 'react-infinite-scroll-component';
-
 //COMPONENT DID MOUNT FIRES AFTER AFTER  RENDER ==== NO DATA FOR PROPS IN RENDER ==== ERROR DUE TO NO VARIABLE FOUND 
 //DON"T PASS PROPS IN RENDER WHICH USE STATE BECAUSE COMPONENT DID MOUNT FIRES THEM 
 //OTHERWISE RENDER WILL NOT GET 
@@ -316,26 +315,13 @@ export class News extends Component {
         this.fetchData(url);
         this.setState({ currentPage: this.state.currentPage + 1 });
     }
-    proxyCheck = () => {
-        const proxyUrl = "https://api-cors-proxy-me.herokuapp.com/"
-        const url = `${proxyUrl}https://newsapi.org/v2/everything?q=bitcoin&apiKey=c1c9663c29a340e6bb8c82cf8e0295f9`;
-        const request = new Request(url);
+   
 
-        fetch(request)
-            .then(response => response.json())
-            .then((news) => {
-                console.log(news);
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    }
     async componentDidMount() { //API Fetch here
-        this.proxyCheck();
         const proxyUrl = "https://api-cors-proxy-me.herokuapp.com/"
-        const reqOptions = { 'mode': 'cors',method: 'GET', headers: { 'Access-Control-Allow-Origin': '*',"Connection": "Upgrade" ,"Upgrade": "websocket" } };
+        const reqOptions = { 'mode': 'cors', method: 'GET', headers: { 'Access-Control-Allow-Origin': '*', "Connection": "Upgrade", "Upgrade": "websocket" } };
         let url = `${proxyUrl}https://newsapi.org/v2/top-headlines?country=${this.props.country}&apiKey=c1c9663c29a340e6bb8c82cf8e0295f9&pageSize=${this.props.pageSize}&page=${this.state.currentPage}&category=${this.props.category}`;
-        let data = await fetch(url,reqOptions);
+        let data = await fetch(url, reqOptions);
         let parsedData = await data.json();
         let pagesAvailable = Math.ceil((parsedData.totalResults) / this.props.pageSize);
 
@@ -348,7 +334,7 @@ export class News extends Component {
 
         });
 
-       
+
 
         // //console.log(this.state.currentPage);
         // console.log(totalPages);
