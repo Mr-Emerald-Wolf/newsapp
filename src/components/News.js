@@ -37,8 +37,7 @@ export class News extends Component {
     }
     fetchData = async () => {
         let url = `https://api.newscatcherapi.com/v2/latest_headlines?countries=US&lang=en&topic=${this.props.category}&page_size=9&page=${this.state.currentPage + 1}`
-        const apiKEY = process.env.api_key;
-        const req = { headers: { 'x-api-key': apiKEY } };
+        const req = { headers: { 'x-api-key': 'wxeZrxJwQKGmxmQpra_eve5w9xjFuTWQtPZdoeRkTWo' } };
 
         let data = await fetch(url, req);
         let parsedData = await data.json();
@@ -62,10 +61,9 @@ export class News extends Component {
 
 
     async componentDidMount() { //API Fetch here
-        const apiKEY = process.env.api_key;
-        const req = { headers: { 'x-api-key': apiKEY } };
+        const reqOptions = { headers: { 'x-api-key': 'wxeZrxJwQKGmxmQpra_eve5w9xjFuTWQtPZdoeRkTWo' } };
         let url = `https://api.newscatcherapi.com/v2/latest_headlines?countries=US&lang=en&page_size=9&page=1&topic=${this.props.category}`
-        let data = await fetch(url, req);
+        let data = await fetch(url, reqOptions);
         let parsedData = await data.json();
         let pagesAvailable = Math.ceil((parsedData.total_hits) / this.props.pageSize);
         let uniqueData = this.removeDuplicates(parsedData.articles)
