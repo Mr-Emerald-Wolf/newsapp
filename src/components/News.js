@@ -36,16 +36,16 @@ export class News extends Component {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
     fetchData = async () => {
-        let url = `https://api.newscatcherapi.com/v2/latest_headlines?countries=US&topic=${this.props.category}&page_size=9&page=${this.state.currentPage + 1}`
-        const req = { headers: { 'x-api-key': 'll0DexesayjJrMbd6BBiRVQb70kXHARxgSGpNwFXgIo' } };
+        let url = `https://api.newscatcherapi.com/v2/latest_headlines?countries=US&lang=en&topic=${this.props.category}&page_size=9&page=${this.state.currentPage + 1}`
+        const req = { headers: { 'x-api-key': 'wxeZrxJwQKGmxmQpra_eve5w9xjFuTWQtPZdoeRkTWo' } };
 
         let data = await fetch(url, req);
         let parsedData = await data.json();
+        let uniqueData = this.removeDuplicates((this.state.articles).concat(parsedData.articles))
 
         this.setState({
             currentPage: this.state.currentPage + 1,
-            data: this.removeDuplicates(parsedData.articles),
-            articles: this.state.articles.concat(parsedData.articles),
+            articles: uniqueData,
             loading: false
         });
         
@@ -61,17 +61,17 @@ export class News extends Component {
 
 
     async componentDidMount() { //API Fetch here
-        const reqOptions = { headers: { 'x-api-key': 'll0DexesayjJrMbd6BBiRVQb70kXHARxgSGpNwFXgIo' } };
-        let url = `https://api.newscatcherapi.com/v2/latest_headlines?countries=US&page_size=9&page=1&topic=${this.props.category}`
+        const reqOptions = { headers: { 'x-api-key': 'wxeZrxJwQKGmxmQpra_eve5w9xjFuTWQtPZdoeRkTWo' } };
+        let url = `https://api.newscatcherapi.com/v2/latest_headlines?countries=US&lang=en&page_size=9&page=1&topic=${this.props.category}`
         let data = await fetch(url, reqOptions);
         let parsedData = await data.json();
         let pagesAvailable = Math.ceil((parsedData.total_hits) / this.props.pageSize);
+        let uniqueData = this.removeDuplicates(parsedData.articles)
+
 
         this.setState({
-            data: parsedData.articles,
-            articles: this.removeDuplicates(parsedData.articles),
+            articles: uniqueData,
             totalPages: pagesAvailable,
-            //totalResults: parsedData.total_hits,
             loading: false
 
         });
@@ -82,24 +82,32 @@ export class News extends Component {
         //console.log(url);
         //console.log(data);
         //console.log(parsedData.articles);
-        //console.log(parsedData.totalResults);
+        //console.log(parsedData.total_hits);
         // //console.log("CDM");
         // console.log(this.state.data.slice(0,6));
         // console.log(this.state.data.slice({this.props.pageSize},18));
 
     }
 
-    removeDuplicates = (duplicates) => {
-        const flag = {};
-        const unique = [];
-        duplicates.forEach(elem => {
-            if (!flag[elem.title]) {
-                flag[elem.title] = true;
-                unique.push(elem);
+    removeDuplicates = (array) => {
+        let unique = [];
+        let keys = [];
+        let titles = [];
+        for (let x in array) {
+            //console.log((array[x])["title"]);
+            let newTitle = (array[x])["title"];
+            if (newTitle == null) {
+                newTitle = "";
+            } 
+            if ((!(titles.includes(newTitle))) && !(keys.includes((array[x])["link"]))) {
+                keys.push((array[x])["link"]);
+                titles.push((array[x])["title"]);
+                unique.push(array[x]);
             }
-        });
-        //console.log(flag);
+        }
+        //console.log(titles.includes("5 experiential gifts for everyone on your list") );
         
+
         return unique;
 
 
