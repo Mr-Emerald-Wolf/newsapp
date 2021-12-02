@@ -10,13 +10,11 @@ export class News extends Component {
 
     static defaulProps = {
         pageSize: 12,
-        country: 'US',
         category: "news",
 
     }
     static propTypes = {
         pageSize: PropTypes.number,
-        country: PropTypes.string,
         category: PropTypes.string
 
     }
@@ -25,16 +23,16 @@ export class News extends Component {
         super();
         this.state = {
             articles: [],
-            loading: true,
             currentPage: 1,
             totalPages: 1,
-            totalResults: 50
+            totalResults: 54
         }
     }
 
     capitalizeFirstLetter = (string) => {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
+
     fetchData = async () => {
         let url = `https://api.newscatcherapi.com/v2/latest_headlines?countries=US&lang=en&topic=${this.props.category}&page_size=9&page=${this.state.currentPage + 1}`
         const req = { headers: { 'x-api-key': 'wxeZrxJwQKGmxmQpra_eve5w9xjFuTWQtPZdoeRkTWo' } };
@@ -46,46 +44,27 @@ export class News extends Component {
         this.setState({
             currentPage: this.state.currentPage + 1,
             articles: uniqueData,
-            loading: false
         });
         
 
     }
+
     fetchMore = () => {
-
         setTimeout(() => { this.fetchData() }, 1000);
-        //console.log("Hit1");
-        //console.log(this.state.articles.length);
-
     }
-
 
     async componentDidMount() { //API Fetch here
         const reqOptions = { headers: { 'x-api-key': 'wxeZrxJwQKGmxmQpra_eve5w9xjFuTWQtPZdoeRkTWo' } };
         let url = `https://api.newscatcherapi.com/v2/latest_headlines?countries=US&lang=en&page_size=9&page=1&topic=${this.props.category}`
         let data = await fetch(url, reqOptions);
         let parsedData = await data.json();
-        let pagesAvailable = Math.ceil((parsedData.total_hits) / this.props.pageSize);
+        //let pagesAvailable = Math.ceil((parsedData.total_hits) / this.props.pageSize);
         let uniqueData = this.removeDuplicates(parsedData.articles)
-
 
         this.setState({
             articles: uniqueData,
-            totalPages: pagesAvailable,
-            loading: false
-
         });
         
-
-        // //console.log(this.state.currentPage);
-        // console.log(totalPages);
-        //console.log(url);
-        //console.log(data);
-        //console.log(parsedData.articles);
-        //console.log(parsedData.total_hits);
-        // //console.log("CDM");
-        // console.log(this.state.data.slice(0,6));
-        // console.log(this.state.data.slice({this.props.pageSize},18));
 
     }
 
@@ -94,7 +73,6 @@ export class News extends Component {
         let keys = [];
         let titles = [];
         for (let x in array) {
-            //console.log((array[x])["title"]);
             let newTitle = (array[x])["title"];
             if (newTitle == null) {
                 newTitle = "";
@@ -105,9 +83,6 @@ export class News extends Component {
                 unique.push(array[x]);
             }
         }
-        //console.log(titles.includes("5 experiential gifts for everyone on your list") );
-        
-
         return unique;
 
 
@@ -117,7 +92,7 @@ export class News extends Component {
         return (
 
             <>
-                <h1 className="text-pink text-center display-4 m-2">Top Headlines{(this.props.category !== "news") ? (" in " + this.capitalizeFirstLetter(this.props.category)) : ""}</h1>
+                <h1 className="text-pink text-center display-4 m-3">Top Headlines{(this.props.category !== "news") ? (" in " + this.capitalizeFirstLetter(this.props.category)) : ""}</h1>
                 <InfiniteScroll
                     dataLength={this.state.articles.length} //This is important field to render the next data
                     next={this.fetchMore}
@@ -130,10 +105,9 @@ export class News extends Component {
                     }
 
                 >
-                    <div className="container my-3">
+                    <div className="container my-2">
                         <div className="row my-1">
-                            {/*this.state.loading && <Spinner />*/}
-                            {!this.state.loading && this.state.articles.map((element) => {
+                            {this.state.articles.map((element) => {
                                 return (<NewsItem key={element.link} articleData={element} />)
                             })}
                         </div>
@@ -143,6 +117,7 @@ export class News extends Component {
 
 
             </>
+
         )
     }
 }

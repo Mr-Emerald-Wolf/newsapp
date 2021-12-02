@@ -22,7 +22,7 @@ const Navbar = () => {
                             </li>
 
                             <li className="nav-item">
-                                <Link to="" className="nav-link text-gray">Created November 2021</Link>
+                                <div className="navbar-text ">Created November 2021</div>
                             </li>
                         </ul>
                         <form className="d-flex">
