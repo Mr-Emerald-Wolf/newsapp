@@ -61,7 +61,7 @@ export class News extends Component {
     }
 
     componentDidMount() { //API Fetch here
-        this.timeout = setTimeout(() => { this.fetchData() }, 500);
+        this.timeout = setTimeout(() => { this.fetchData() }, 1000);
     }
     componentWillUnmount() {
         clearTimeout(this.timeout)
