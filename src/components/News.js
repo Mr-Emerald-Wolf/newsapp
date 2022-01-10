@@ -40,7 +40,7 @@ export class News extends Component {
             "method": "GET",
             "headers": {
                 "x-rapidapi-host": "free-news.p.rapidapi.com",
-                "x-rapidapi-key": "5f35646e20msh6b6a968b2491722p161b2cjsn148763083eda"
+                "x-rapidapi-key": process.env.REACT_APP_API_KEY
             }
         })
         let parsedData = await data.json();
@@ -57,7 +57,7 @@ export class News extends Component {
 
 
     fetchMore = () => {
-        setTimeout(() => { this.fetchData() }, 500);
+        setTimeout(() => { this.fetchData() }, 1000);
     }
 
     componentDidMount() { //API Fetch here
