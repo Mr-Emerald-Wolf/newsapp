@@ -8,7 +8,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 //OTHERWISE RENDER WILL NOT GET 
 export class News extends Component {
 
-    static defaulProps = {
+    static defaultProps = {
         pageSize: 12,
         category: "news",
 
