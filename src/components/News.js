@@ -23,7 +23,7 @@ export class News extends Component {
         super();
         this.state = {
             articles: [],
-            currentPage: 1,
+            currentPage: 0,
             totalPages: 1,
             totalResults: 54
         }
@@ -34,10 +34,15 @@ export class News extends Component {
     }
 
     fetchData = async () => {
-        let url = `https://api.newscatcherapi.com/v2/latest_headlines?countries=US&lang=en&topic=${this.props.category}&page_size=9&page=${this.state.currentPage + 1}`
-        const req = { headers: { 'x-api-key': 'wxeZrxJwQKGmxmQpra_eve5w9xjFuTWQtPZdoeRkTWo' } };
+        
 
-        let data = await fetch(url, req);
+        let data = await fetch(`https://free-news.p.rapidapi.com/v1/search?q=${this.props.category}%20&lang=en&page=${this.state.currentPage + 1}&page_size=9`, {
+            "method": "GET",
+            "headers": {
+                "x-rapidapi-host": "free-news.p.rapidapi.com",
+                "x-rapidapi-key": "5f35646e20msh6b6a968b2491722p161b2cjsn148763083eda"
+            }
+        })
         let parsedData = await data.json();
         let uniqueData = this.removeDuplicates((this.state.articles).concat(parsedData.articles))
 
@@ -45,29 +50,22 @@ export class News extends Component {
             currentPage: this.state.currentPage + 1,
             articles: uniqueData,
         });
-        
+
+
 
     }
+
 
     fetchMore = () => {
-        setTimeout(() => { this.fetchData() }, 1000);
+        setTimeout(() => { this.fetchData() }, 500);
     }
 
-    async componentDidMount() { //API Fetch here
-        const reqOptions = { headers: { 'x-api-key': 'wxeZrxJwQKGmxmQpra_eve5w9xjFuTWQtPZdoeRkTWo' } };
-        let url = `https://api.newscatcherapi.com/v2/latest_headlines?countries=US&lang=en&page_size=9&page=1&topic=${this.props.category}`
-        let data = await fetch(url, reqOptions);
-        let parsedData = await data.json();
-        //let pagesAvailable = Math.ceil((parsedData.total_hits) / this.props.pageSize);
-        let uniqueData = this.removeDuplicates(parsedData.articles)
-
-        this.setState({
-            articles: uniqueData,
-        });
-        
-
+    componentDidMount() { //API Fetch here
+        this.timeout = setTimeout(() => { this.fetchData() }, 500);
     }
-
+    componentWillUnmount() {
+        clearTimeout(this.timeout)
+    }
     removeDuplicates = (array) => {
         let unique = [];
         let keys = [];
@@ -76,7 +74,7 @@ export class News extends Component {
             let newTitle = (array[x])["title"];
             if (newTitle == null) {
                 newTitle = "";
-            } 
+            }
             if ((!(titles.includes(newTitle))) && !(keys.includes((array[x])["link"]))) {
                 keys.push((array[x])["link"]);
                 titles.push((array[x])["title"]);
@@ -92,7 +90,7 @@ export class News extends Component {
         return (
 
             <>
-                <h1 className="text-pink text-center display-4 m-3">Top Headlines{(this.props.category !== "news") ? (" in " + this.capitalizeFirstLetter(this.props.category)) : ""}</h1>
+                <h1 className="text-pink text-center display-4 m-3">Top Headlines{(this.props.category !== "us") ? (" in " + this.capitalizeFirstLetter(this.props.category)) : ""}</h1>
                 <InfiniteScroll
                     dataLength={this.state.articles.length} //This is important field to render the next data
                     next={this.fetchMore}
