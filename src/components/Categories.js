@@ -12,7 +12,7 @@ export default class Categories extends Component {
                         <Link to="/sports" className="btn btn-dark btn-white w-10">Sports</Link>
                         <Link to="/science" className="btn btn-dark btn-white w-10">Science</Link>
                         <Link to="/business" className="btn btn-dark btn-white w-10">Business</Link>
-                        <Link to="/health" className="btn btn-dark btn-white w-10">Travel</Link>
+                        <Link to="/travel" className="btn btn-dark btn-white w-10">Travel</Link>
                         <Link to="/entertainment" className="btn btn-dark btn-white w-10">TV</Link>
                     </div>
                     <Outlet />
