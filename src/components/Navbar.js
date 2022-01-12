@@ -1,14 +1,9 @@
 import React from 'react'
-import { Link, useSearchParams} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 
 const Navbar = () => {
 
-    const [search, setSearch] = useSearchParams();
-    const HandleSubmit = () => {
-        var x = document.getElementById("query").value;
-        setSearch({ query:  x});
-      };
     //useState, define functions here
     return (
         <>
