@@ -85,7 +85,7 @@ export class News extends Component {
 
 
     }
-
+ 
     render() {
         return (
 
